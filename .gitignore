@@ -1,0 +1,92 @@
+# Laravel core
+/vendor/
+/node_modules/
+/public/hot
+/public/storage
+/storage/*.key
+/.env
+/.env.backup
+/.phpunit.result.cache
+/Homestead.json
+/Homestead.yaml
+/auth.json
+/nbproject/
+
+# Environment files
+.env
+.env.*
+!.env.example
+
+# IDE and editor files
+.idea/
+.vscode/
+*.swp
+*.swo
+*~
+.DS_Store
+Thumbs.db
+
+# Log files
+*.log
+npm-debug.log
+yarn-error.log
+
+# Cache files
+/bootstrap/cache/*
+!/bootstrap/cache/.gitignore
+/storage/framework/cache/*
+!/storage/framework/cache/.gitignore
+/storage/framework/sessions/*
+!/storage/framework/sessions/.gitignore
+/storage/framework/views/*
+!/storage/framework/views/.gitignore
+/storage/logs/*
+!/storage/logs/.gitignore
+
+# Compiled assets
+/public/mix-manifest.json
+/public/js/
+/public/css/
+!/public/js/.gitignore
+!/public/css/.gitignore
+npm-debug.log
+yarn-error.log
+
+# Database
+*.sqlite3
+*.sqlite
+/database/*.sqlite
+/database/*.sqlite3
+
+# Testing
+.phpunit.result.cache
+/coverage/
+
+# Temporary files
+tmp/
+temp/
+*.tmp
+*.temp
+
+# Backup files
+*.bak
+*.backup
+*.old
+
+# Uploads (if not tracked)
+/storage/app/public/uploads/*
+!/storage/app/public/uploads/.gitkeep
+
+# Debug bar
+/_debugbar/
+
+# Horizon
+/horizon/*
+!/horizon/.gitignore
+
+# Telescope
+/telescope/*
+!/telescope/.gitignore
+
+# Sail
+/vendor/bin/sail
