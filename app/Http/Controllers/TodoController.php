@@ -11,11 +11,11 @@ class TodoController extends Controller
     public function index(Request $request){
     
 
-        $all_todos = Todo::all(); 
+        $all_todos = auth()->user()->todos()->latest()->get(); 
         $editTodo = null ; 
 
         if($request->has('edit')){
-            $editTodo = Todo::find($request->edit);
+            $editTodo = auth()->user()->todos()->find($request->edit)  ; 
 
         };
 
@@ -33,7 +33,7 @@ class TodoController extends Controller
             "due_date"=>"nullable|date",
         ]) ; 
 
-        Todo::create([
+        auth()->user()->todos()->create([
             'title'=>$validated['title'] ,
             'description'=>$validated['description'] ?? null  , 
             'priority'=>$validated['priority'] ?? "medium" , 
@@ -48,7 +48,7 @@ class TodoController extends Controller
 
     public function destroy($id){
 
-        $target_todo = Todo::find($id) ; 
+        $target_todo = auth()->user()->todos()->findOrFail($id) ; 
         $target_todo->delete() ; 
 
 
@@ -59,7 +59,7 @@ class TodoController extends Controller
 
     public function update(Request $request,$id){
 
-            $target_todo  = Todo::find($id) ; 
+            $target_todo = auth()->user()->todos()->findOrFail($id) ;
             $validated = $request->validate([
                 'title'=>'required|string|max:255'  , 
                 'description'=>'nullable|string' ,
@@ -77,10 +77,10 @@ class TodoController extends Controller
 
     public function toggle($id){
 
-        $target_todo = Todo::find($id) ; 
+        $target_todo = auth()->user()->todos()->findOrFail($id) ;
         $target_todo->status  = ($target_todo->status== "pending") ?  "completed" : "pending" ; 
         $target_todo->save() ; 
-        
+
         return back() ; 
 
     }

@@ -1,14 +1,28 @@
 <?php
 
+use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\TodoController;
+use App\Http\Controllers\TodoController ; 
 
+Route::get('/', function () {
+    return view('welcome');
+});
 
-Route::get('/',[TodoController::class , "index"])->name("todos.index");
+Route::get('/dashboard', function () {
+    return view('dashboard');
+})->middleware(['auth', 'verified'])->name('dashboard');
 
-Route::post('/' , [TodoController::class , "create"])->name('todos.store'); 
+Route::middleware('auth')->group(function () {
+    Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
+    Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
+    Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 
+    //todo routes
+    Route::get('/', [TodoController::class, 'index'])->name('todos.index');
+    Route::post('/todos', [TodoController::class, 'create'])->name('todos.store');
+    Route::put('/todos/{id}', [TodoController::class, 'update'])->name('todos.update');
+    Route::delete('/todos/{id}', [TodoController::class, 'destroy'])->name('todos.delete');
+    Route::patch('/todos/{id}/toggle', [TodoController::class, 'toggle'])->name('todos.toggle');
+});
 
-Route::delete('/todos/{id}' , [TodoController::class , "destroy"])->name('todos.delete'); 
-Route::put('/todos/{id}' , [TodoController::class , "update"])->name('todos.update')  ; 
-Route::put('todos/{id}/toggle',[TodoController::class , "toggle"])->name('todos.toggle') ; 
+require __DIR__.'/auth.php';
