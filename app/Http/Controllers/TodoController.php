@@ -3,61 +3,86 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Models\Todo  ;
+use App\Models\Todo ; 
 
 class TodoController extends Controller
 {
     
+    public function index(Request $request){
+    
 
-    public function index(){
+        $all_todos = Todo::all(); 
+        $editTodo = null ; 
 
-        $todos  =  Todo::all();
-        return view("todos.index") ; 
+        if($request->has('edit')){
+            $editTodo = Todo::find($request->edit);
 
+        };
 
-    } 
-
-
-    public function  store(Request $request){
-
-        $requestData = $request->only(['title', "description"]) ; 
-
-        Todo::create([
-            'title'=> $requestData['title'] , 
-            'description'=> $requestData['descriptoin'] 
-        ]) ; 
+        return view('todos.index' , compact("all_todos" , "editTodo")) ; 
 
     }
 
 
-    public function update( Request $request,$id){
+    public function create(Request $request){
 
-        $targetTodo =  Todo::find($id) ; 
-        $targetTodo->update([
-
-                'titile'=> $request->title , 
-                'description'=> $request->description 
-
+        $validated = $request->validate([
+            'title'=>'required|string|max:255' , 
+            'description'=>"nullable|string" , 
+            'priority'=>"nullable|in:low,medium,high",
+            "due_date"=>"nullable|date",
         ]) ; 
+
+        Todo::create([
+            'title'=>$validated['title'] ,
+            'description'=>$validated['description'] ?? null  , 
+            'priority'=>$validated['priority'] ?? "medium" , 
+            "due_date"=>$validated['due_date'] ?? null , 
+        ]) ; 
+
+
+        return redirect()->back();
 
 
     }
 
     public function destroy($id){
 
-        $targetTodo = Todo::find($id) ; 
-        $todo->delete()
+        $target_todo = Todo::find($id) ; 
+        $target_todo->delete() ; 
+
+
+        return redirect()->back() ; 
 
     }
 
-    public function toggleComplete($id){
 
-        $todo = Todo::find($id) ; 
-        $todo->is_completed = !$todo->is_completed; 
-        $todo->save();
+    public function update(Request $request,$id){
 
+            $target_todo  = Todo::find($id) ; 
+            $validated = $request->validate([
+                'title'=>'required|string|max:255'  , 
+                'description'=>'nullable|string' ,
+                'priority'=>'nullable|in:low,medium,high' , 
+                "due_date"=>'nullable|date' , 
+            ]) ; 
+
+
+            $target_todo->update($validated);
+
+            return redirect()->route('todos.index') ; 
 
     }
 
+
+    public function toggle($id){
+
+        $target_todo = Todo::find($id) ; 
+        $target_todo->status  = ($target_todo->status== "pending") ?  "completed" : "pending" ; 
+        $target_todo->save() ; 
+        
+        return back() ; 
+
+    }
 
 }
