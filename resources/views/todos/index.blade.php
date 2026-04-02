@@ -442,7 +442,7 @@
                           method="POST"
                           class="hidden"
                     >
-                        @csrf @method('PUT')
+                        @csrf @method('PATCH')
                     </form>
 
                     <div 
