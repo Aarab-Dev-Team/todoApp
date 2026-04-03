@@ -18,7 +18,12 @@ class TodoFactory extends Factory
     public function definition(): array
     {
         return [
-            //
+        'user_id' => \App\Models\User::factory(),
+        'title' => $this->faker->sentence(4),    
+        'description' => $this->faker->paragraph(), 
+        'status' => $this->faker->randomElement(['pending', 'completed']),
+        'priority' => $this->faker->randomElement(['low', 'medium', 'high']),
+        'due_date' => $this->faker->dateTimeBetween('now', '+1 month'), 
         ];
     }
 }
